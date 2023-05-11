@@ -9,7 +9,7 @@ const authorize = (req, res, next) => {
         process.env.JWT_SECRET_KEY
       );
       // ---------------------------
-      console.log("authorize----", verify);
+      // console.log("authorize----", verify);
       if (verify) {
         next();
       } else {
