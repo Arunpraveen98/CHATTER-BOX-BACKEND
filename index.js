@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const cors = require("cors");
+// const cors = require("cors");
 const socket = require("socket.io");
 const PORT = process.env.PORT || 8000;
 require("dotenv").config();
@@ -9,7 +9,13 @@ const authRoutes = require("./routes/Users_Auth_Route");
 const messageRoutes = require("./routes/Messages_Route");
 const { Connect_DB } = require("./DB");
 // -----------------------
-app.use(cors({ origin: process.env.CLIENT_URL }));
+// app.use(cors({ origin: process.env.CLIENT_URL }));
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", `${process.env.CLIENT_URL}`);
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 app.use(express.json());
 // -----------------------
 Connect_DB();
