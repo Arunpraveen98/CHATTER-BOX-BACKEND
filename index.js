@@ -11,7 +11,7 @@ const { Connect_DB } = require("./DB");
 // -----------------------
 app.use(
   cors({
-    origin: "*",
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -33,7 +33,9 @@ const server = app.listen(PORT, () => console.log(`Server started on ${PORT}`));
 //? Set up Socket.IO server
 const io = socket(server, {
   cors: {
-    origin: true,
+    origin: process.env.CLIENT_URL,
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   },
 });
