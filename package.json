@@ -1,7 +1,7 @@
 {
   "name": "chatter-box-backend",
   "version": "1.0.0",
-  "description":"Chatter Box is a real-time chat application that allows users to communicate with each other via text messages in a user-friendly and customizable interface.",
+  "description": "Chatter Box is a real-time chat application that allows users to communicate with each other via text messages in a user-friendly and customizable interface.",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js"
