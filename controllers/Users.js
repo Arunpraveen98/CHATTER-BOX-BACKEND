@@ -17,13 +17,13 @@ const User_Login = async (req, res) => {
       res.status(401).json({ message: "❗Please Signup and Login." });
     } else {
       const isPasswordValid = await bcrypt.compare(Password, user.password);
-      console.log(isPasswordValid);
+      // console.log(isPasswordValid);
       if (isPasswordValid) {
         const token = jwt.sign({ id: user._id }, JWT_SECRET_KEY, {
           expiresIn: process.env.JWT_TIME_OUT,
         });
 
-        console.log(token);
+        // console.log(token);
         const response = {
           _id: user._id,
           username: user.username,
@@ -42,15 +42,16 @@ const User_Login = async (req, res) => {
       }
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "❗Internal Server Error" });
   }
 };
 // ---------------------------
 const User_Register = async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const { username, email, password } = req.body;
-    console.log(username, email, password);
+    // console.log(username, email, password);
     const userEmailCheck = await User.findOne({ email: email });
     const usernameCheck = await User.findOne({ username: username });
     // console.log(usernameCheck);
@@ -74,10 +75,10 @@ const User_Register = async (req, res) => {
           email: email,
           password: hash,
         });
-        console.log(Register_user);
+        // console.log(Register_user);
         await Register_user.save();
         res.status(201).json({ message: "👍successfully User Registered" });
-        console.log(Register_user);
+        // console.log(Register_user);
       }
     }
   } catch (error) {
@@ -94,19 +95,20 @@ const Get_All_Users = async (req, res) => {
       "avatarImage",
       "_id",
     ]);
-    return res.json(users);
-  } catch (ex) {
-    return res.json({ message: "getAllUsers error" });
+    return res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Get_All_Users error" });
   }
 };
 // ---------------------------
 const Set_Avatar = async (req, res) => {
   try {
-    console.log(req.params);
-    console.log(req.body);
+    // console.log(req.params);
+    // console.log(req.body);
     const userId = req.params.id;
     const avatarImage = req.body.image;
-    console.log(avatarImage);
+    // console.log(avatarImage);
     const userData = await User.findByIdAndUpdate(
       { _id: userId },
       {
@@ -115,22 +117,26 @@ const Set_Avatar = async (req, res) => {
       },
       { new: true }
     );
-    console.log(userData);
+    // console.log(userData);
     return res.status(200).json({
       isSet: userData.isAvatarImageSet,
       image: userData.avatarImage,
     });
-  } catch (ex) {
-    return res.json({ message: "SetAvatar  error" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Set_Avata  error" });
   }
 };
 // ---------------------------
 const set_Default_Avatar = async (req, res) => {
   try {
-    const AvatarData = await Avatar.aggregate([ { $project: { Avatar_Img: 1,_id:0 } }]);
-    console.log(AvatarData);
+    const AvatarData = await Avatar.aggregate([
+      { $project: { Avatar_Img: 1, _id: 0 } },
+    ]);
+    // console.log(AvatarData);
     res.status(200).json(AvatarData);
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -140,8 +146,9 @@ const User_Logout = (req, res) => {
     if (!req.params.id) return res.json({ msg: "User id is required " });
     onlineUsers.delete(req.params.id);
     return res.status(200).send();
-  } catch (ex) {
-    return res.json({ message: "Logout error" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Logout error" });
   }
 };
 // ---------------------------

@@ -16,9 +16,11 @@ const Get_Messages = async (req, res, next) => {
         message: msg.message.text,
       };
     });
-    res.json(projectedMessages);
-  } catch (ex) {
-    next(ex);
+    res.status(200).json(projectedMessages);
+  } catch (error) {
+    // next(ex);
+    console.log(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 // ---------------------------
@@ -31,10 +33,16 @@ const Add_Messages = async (req, res, next) => {
       sender: from,
     });
 
-    if (data) return res.json({ msg: "Message added successfully." });
-    else return res.json({ msg: "Failed to add message to the database" });
-  } catch (ex) {
-    next(ex);
+    if (data)
+      return res.status(200).json({ msg: "Message added successfully." });
+    else
+      return res
+        .status(500)
+        .json({ msg: "Failed to add message to the database" });
+  } catch (error) {
+    // next(ex);
+    console.log(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 // ---------------------------
